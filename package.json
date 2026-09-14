@@ -1,0 +1,1 @@
+{"name":"particle-lab","private":true,"type":"module","scripts":{"test":"node --test tests/core.test.js"},"description":"Local interactive particle motion and learned dynamics comparison"}

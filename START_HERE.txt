@@ -1,0 +1,87 @@
+PARTICLE LAB
+Start here
+
+WHAT YOU NEED
+A computer with Python 3.10 or newer and a modern desktop browser.
+The trained model is already included. No account, API key, pip installation,
+Node installation, or model training is needed to run the app.
+
+WINDOWS QUICK START
+1. Right-click the project ZIP and choose Extract All.
+2. Open the extracted particle_lab folder. You should see app.py here.
+3. Double-click START_WINDOWS.bat.
+4. Your browser should open Particle Lab. Keep the terminal window open.
+
+If the browser does not open, enter this address in your browser:
+http://127.0.0.1:8765
+
+ALTERNATIVE USING A TERMINAL
+Open the particle_lab folder in File Explorer.
+Click the address bar, type cmd, then press Enter.
+In the new terminal, enter:
+
+    py -3 app.py
+
+If the py command is unavailable, try:
+
+    python app.py
+
+If neither command works, install Python from https://www.python.org/downloads/
+using its Windows installer, then reopen the terminal and try again.
+Do not double-click web/index.html; app.py serves the model and modules locally.
+
+STOP AND RESTART
+To stop: click the terminal and press Ctrl+C.
+To restart: double-click START_WINDOWS.bat again, or run the same command.
+After editing a file, refresh the browser. A hard refresh is Ctrl+Shift+R.
+If the port is occupied, run: py -3 app.py --port 8766
+
+TRY THESE FIRST
+- Select Sphere, Cube, Ring, or Helix from Formation.
+- Uncheck Animate formation to hold the shape; check it to resume its path.
+- Select Push, then hold and drag inside the simulation.
+- Choose Auto under Depth mode to follow the frontmost particles under your
+  cursor. Empty space does not push. Choose Manual to use the depth slider.
+- Adjust Pusher depth in Manual mode to reach particles in front of or behind the center.
+  For a sphere, pushing at its visible edge is an easy first experiment.
+- Let go and move the tool away: particles ease back while motion is enabled.
+- Use Orbit to rotate, Pan to reposition, and your mouse wheel to zoom.
+- Drag the dividers to change menu width and simulation height.
+- Scroll inside the lower panel. The simulation stays in place.
+- Scroll down below the large performance chart for the two live model feeds.
+
+COLOR KEY
+White: outside the tool's influence.
+Inside the tool: baby blue at the far edge, then green, yellow, and red nearest.
+Hovering previews the affected region. Holding the mouse applies the force.
+The pusher is three dimensional; a particle that overlaps its screen circle
+can still be outside its depth range.
+
+ABOUT THE AI
+A bundled, trained neural network predicts the next local displacement of a
+sample of particles. The feed compares its prediction with the actual engine.
+The neural network does not control the animation. Its errors cannot send
+visible particles out of control. You can disable the comparison if needed.
+Read docs/MODEL_CARD.md for actual training and evaluation results.
+
+PERFORMANCE AND GRAPHICS
+WebGL compute updates particles in graphics buffers. Whether your browser uses
+hardware or a software renderer depends on your device and browser settings.
+A blank GPU timing value means that measurement is unavailable, not zero.
+If performance is slow, reduce particle count, reduce particle size, or turn
+off the live prediction comparison. CPU reference is available in Compute mode.
+You can force CPU reference at launch by opening:
+http://127.0.0.1:8765/?cpu=1
+
+SAVING
+Save setup downloads starting controls and the seed, not a live particle-state
+checkpoint. Load setup recreates that starting experiment. Screenshot exports
+only the simulation. Export CSV downloads the last 60 seconds of measured
+performance. Record snapshot stores a setup and recent timing summary in this
+browser. Downloads go to your browser's usual download location.
+
+NEXT FILES TO READ
+README.md                    Project overview and technical scope
+GITHUB_GUIDE.md              Upload using the GitHub website
+LEARN_THE_PROJECT.md         Plain-language explanation of the code
+web/models/training_report.json   Detailed model evaluation numbers
