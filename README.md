@@ -74,11 +74,3 @@ The project includes numerical and browser interaction tests covering particle m
 Graphics tests used a software renderer. Performance on a physical GPU depends on the computer and browser configuration.
 
 The simulation uses shape paths and damped displacement dynamics. It does not implement particle collisions or a scientific fluid solver.
-
-## In Development
-
-These changes are implemented in the working version but still need final validation and packaging:
-
-- An adjustable slowdown field that remains active while using the pusher.
-- Thicker helix formations.
-- An expanded zoom range of up to 400%.
