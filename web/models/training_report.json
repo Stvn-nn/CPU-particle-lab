@@ -1,0 +1,56 @@
+{
+  "model": "Local Dynamics MLP",
+  "version": 1,
+  "architecture": [
+    11,
+    48,
+    48,
+    3
+  ],
+  "activation": "tanh",
+  "training_samples": 100000,
+  "internal_validation_fraction": 0.15,
+  "training_seed": 1701,
+  "epochs": 165,
+  "training_seconds": 26.28,
+  "validation": {
+    "samples": 12000,
+    "seed": 2402,
+    "velocity_rmse": 0.0072633553717215025,
+    "velocity_error_p95": 0.01847267827865725,
+    "one_step_position_rmse": 0.00012105592286202504,
+    "unchanged_velocity_rmse": 0.059877366655717724,
+    "finite": true
+  },
+  "held_out_test": {
+    "samples": 16000,
+    "seed": 3503,
+    "velocity_rmse": 0.006869001516330659,
+    "velocity_error_p95": 0.018371588677391013,
+    "one_step_position_rmse": 0.00011448335860551098,
+    "unchanged_velocity_rmse": 0.06013881586036562,
+    "finite": true
+  },
+  "recovery_rollout": {
+    "scenarios": 128,
+    "steps": 180,
+    "seconds": 3,
+    "seed": 4604,
+    "final_position_rmse": 0.014053457137254182,
+    "max_position_rmse": 0.014709781362726609,
+    "finite": true
+  },
+  "quality_gate_passed": true,
+  "quality_gate": {
+    "max_velocity_rmse": 0.025,
+    "max_recovery_rollout_rmse": 0.08,
+    "improvement_over_unchanged_velocity": "at least 50 percent"
+  },
+  "limits": [
+    "Synthetic local displacement dynamics, not a general physics model.",
+    "One fixed step is 1/60 second. No particle-particle collisions.",
+    "Model is comparison-only. The deterministic engine controls motion.",
+    "Browser hardware performance must be measured on the target machine.",
+    "Predictions outside training ranges are skipped, not trusted."
+  ]
+}

@@ -1,0 +1,2 @@
+# Running the app requires Python 3.10+ and its standard library only.
+# No pip installation is needed to launch app.py.

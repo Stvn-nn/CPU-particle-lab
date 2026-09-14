@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>Particle Lab</title><link rel="icon" href="data:,"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div id="app">
+<aside id="controls" aria-label="Simulation controls">
+<header><h1>PARTICLE LAB</h1><p class="muted">Motion · interaction · measurement</p></header>
+<section class="control-group"><label class="eyebrow" for="shape">Formation</label><select id="shape"><option value="0">Sphere</option><option value="1">Cube</option><option value="2">Ring</option><option value="3">Helix</option></select>
+<label class="label" for="count">Particle count</label><div class="input-row"><input type="number" id="count" min="300" max="50000" step="100" value="6000"><button id="apply-count" type="button">Apply</button></div>
+<label class="check"><input id="moving" type="checkbox" checked> Animate formation</label>
+<label class="label" for="speed">Motion speed <output id="speed-out">1.0×</output></label><input id="speed" type="range" min="0.1" max="2" step="0.1" value="1">
+<p id="motion-description" class="muted">Particles travel along the sphere surface.</p>
+<div class="buttons"><button id="pause" type="button" aria-pressed="false">Pause</button><button id="reset" type="button">Reset</button></div></section>
+<section class="control-group"><div class="eyebrow">Interaction</div><div class="buttons tool-buttons"><button type="button" data-tool="push" aria-pressed="true">Push</button><button type="button" data-tool="orbit" aria-pressed="false">Orbit</button><button type="button" data-tool="pan" aria-pressed="false">Pan</button></div>
+<label class="label" for="radius">Push radius <output id="radius-out">45%</output></label><input id="radius" type="range" min="0" max="100" value="45">
+<label class="label" for="strength">Push strength <output id="strength-out">50%</output></label><input id="strength" type="range" min="10" max="100" value="50">
+<label class="label" for="depth-mode">Depth mode</label><select id="depth-mode" aria-describedby="depth-note"><option value="manual">Manual — use slider</option><option value="auto">Auto — follow cursor</option></select><p id="depth-note" class="muted">Choose how far into the scene to push.</p>
+<label class="label" for="depth">Pusher depth <output id="depth-out">Center</output></label><input id="depth" type="range" min="-100" max="100" value="0"><div class="end-labels"><span>Near</span><span>Far</span></div>
+<label class="label" for="recovery">Return speed <output id="recovery-out">8</output></label><input id="recovery" type="range" min="3" max="14" step="1" value="8"><p class="muted">When motion is on, displaced particles ease back to their moving path outside the pusher.</p></section>
+<section class="control-group"><div class="eyebrow">Camera and display</div>
+<label class="label" for="zoom">Zoom <output id="zoom-out">100%</output></label><input id="zoom" type="range" min="50" max="160" value="100">
+<label class="label" for="size">Particle size <output id="size-out">2.6 px</output></label><input id="size" type="range" min="1" max="5" step=".2" value="2.6">
+<div class="buttons"><button id="home-camera" type="button">Center view</button><button id="screenshot" type="button">Screenshot</button></div>
+<label class="label" for="backend">Compute mode</label><select id="backend"><option value="gpu">WebGL compute</option><option value="cpu">CPU reference</option></select><p class="muted" id="backend-note">Checking graphics support…</p>
+</section>
+<section class="control-group"><div class="eyebrow">Experiment</div><label class="label" for="seed">Random seed</label><input id="seed" type="number" min="1" max="2147483647" step="1" value="731"><div class="buttons"><button id="save-setup" type="button">Save setup</button><button id="load-setup" type="button">Load setup</button></div><input id="import-file" type="file" accept=".json" hidden><button id="restore-layout" type="button" class="full">Reset panel sizes</button><p class="muted">Drag the dividers to resize. Arrow keys work when a divider is focused.</p></section>
+</aside>
+<button id="v-divider" type="button" class="divider vertical" aria-label="Resize left menu. Drag or use left and right arrows."></button>
+<main id="main">
+<section id="viewport" aria-label="3D particle simulation">
+<canvas id="particles" role="img" aria-label="Interactive three dimensional particles"></canvas><canvas id="overlay" aria-hidden="true"></canvas>
+<div class="scene-top"><div><h2 id="scene-title">Sphere</h2><div id="scene-subtitle" class="muted">6,000 particles · running</div></div><div id="mode-label">STARTING</div></div>
+<div class="scene-bottom"><span id="interaction-hint">Hold and drag to push · Scroll to zoom</span><span class="legend">Far <i class="heat-strip"></i> Near <i class="white-dot"></i> Unaffected</span></div>
+<div id="message" role="status" aria-live="polite" hidden></div>
+</section>
+<button id="h-divider" type="button" class="divider horizontal" aria-label="Resize simulation and lower panel. Drag or use up and down arrows."></button>
+<section id="analysis" aria-label="Scrollable live information">
+<section id="performance-panel"><div class="section-heading"><div><h2>Live performance</h2><p class="muted">Measured on this device · rolling 60 seconds</p></div><button type="button" id="export-csv">Export CSV</button></div>
+<div class="metrics"><div><span>Display rate</span><strong id="fps-value">—</strong><small>frames / second</small></div><div><span>Simulation work</span><strong id="submit-value">—</strong><small id="submit-label">CPU submission ms / frame</small></div><div><span>GPU compute + draw</span><strong id="gpu-value">—</strong><small id="gpu-caption">Timing extension check</small></div><div><span>Particle buffers</span><strong id="memory-value">—</strong><small>MB allocated by this app</small></div></div>
+<div class="chart-controls" aria-label="Visible timing series"><label><input type="checkbox" id="show-frame" checked><i class="series-swatch frame"></i>Frame interval</label><label><input type="checkbox" id="show-submit" checked><i class="series-swatch submit"></i>Simulation work</label><label><input type="checkbox" id="show-gpu" checked><i class="series-swatch gpu"></i>GPU compute + draw</label></div>
+<div id="chart-wrap"><canvas id="performance-chart" role="img" aria-label="Live timing chart with elapsed seconds on the horizontal axis and milliseconds on the vertical axis"></canvas><div id="chart-tooltip" hidden></div></div>
+<p id="timing-note" class="muted">Frame interval includes display pacing. CPU submission time is not GPU execution time. Missing GPU timings stay blank.</p></section>
+<section class="ai-grid" aria-label="Live model feed"><div class="ai-status"><div class="eyebrow">Live feed / model status</div><h3 id="model-name">Loading learned dynamics…</h3><p id="model-summary" class="muted">Reading the bundled model locally.</p><div class="fact-row"><span>Held-out velocity RMSE</span><span id="test-error">—</span></div><div class="fact-row"><span>Training transitions</span><span id="training-count">—</span></div><label class="check"><input type="checkbox" id="ai-enabled" checked> Live prediction comparison</label><p class="muted">The learned model predicts a sampled next step. Deterministic rules control the visible particles.</p></div>
+<div class="ai-comparison"><div class="eyebrow">Live feed / comparison stream</div><h3>Predicted vs reference</h3><div class="fact-row"><span>Latest position RMSE</span><span id="live-error">—</span></div><div class="fact-row"><span>Prediction time</span><span id="prediction-time">—</span></div><div id="comparison-log" role="log" aria-label="Recent learned model comparisons" aria-live="off"><p class="muted">Waiting for the first measured comparison.</p></div></div></section>
+<section class="details"><div class="section-heading"><h2>Experiment history</h2><button type="button" id="record-run">Record snapshot</button></div><p class="muted">Snapshots save settings and the current timing summary on this browser. They are not hardware benchmarks.</p><div id="history"></div></section>
+<section class="details"><h2>What is being measured</h2><div class="facts"><div><h3>Motion and recovery</h3><p>Ring, sphere, and helix use repeatable shape paths. Cube particles follow free reflected paths inside a box. Pushing adds a local displacement; motion-enabled recovery returns it to the original moving path.</p></div><div><h3>Model scope</h3><p>The bundled neural network learned synthetic displacement transitions at 60 simulation steps per second. Predictions outside its training range are skipped. This is a shape-motion lab, not a fluid solver or particle collision model.</p></div><div><h3>Performance scope</h3><p>WebGL updates particle state in graphics buffers. Browser settings may use hardware or a software renderer. This app does not claim hardware identity or system-wide memory use. Use the CPU mode for a reference implementation.</p></div><div><h3>Reproducibility</h3><p>Save a setup to reproduce its starting formation and controls. CSV exports contain real timing samples and settings. Resizing changes drawing cost. Background tabs pause automatically; long stalls do not cause large simulation jumps.</p></div></div></section>
+</section>
+</main>
+</div>
+<noscript>Enable JavaScript to run Particle Lab.</noscript>
+<script type="module" src="app.js"></script>
+</body></html>
